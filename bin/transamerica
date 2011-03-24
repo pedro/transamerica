@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+$: << File.dirname(__FILE__) + "/../lib/"
+
+require "transamerica"
+
+include Transamerica
+
+def load_player(fname, id)
+  name = "#{id}-" + File.basename(fname).gsub(/\..*/, '')
+  Engine.load_player File.read(fname), name
+end
+
+curr = 1
+players = ARGV.map { |bot| load_player(bot, "p#{curr += 1}") }
+
+board = Board.new(5, 5)
+board.add_city [0,0], City.new("A", :red)
+board.add_city [1,1], City.new("B", :red)
+board.add_city [2,2], City.new("C", :red)
+board.add_city [3,3], City.new("D", :red)
+
+game = Engine.new(board, players)
+game.run
+puts "AND TEH WINNER IS: #{game.winner}"

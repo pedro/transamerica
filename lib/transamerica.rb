@@ -1,6 +1,6 @@
 module Transamerica
   class Board
-    attr_accessor :cities
+    attr_accessor :cols, :rows, :cities, :hqs
 
     DIRECTIONS = {
       :l  => [-1, 0],
@@ -16,6 +16,8 @@ module Transamerica
       @hqs    = {}
       @adjacency = {}
 
+      @cols = cols
+      @rows = rows
       @grid = Array.new(cols)
       (0..cols).each do |x|
         @grid[x] = Array.new(rows)
@@ -138,6 +140,15 @@ module Transamerica
   class Engine
     attr_accessor :board, :players, :current, :winner
 
+    def self.load_player(contents, name)
+      m = Module.new
+      m.class_eval(contents)
+      klass = m.const_get(m.constants.first)
+      klass.send(:define_method, :to_s) { name }
+      klass.send(:define_method, :id)   { name }
+      klass.new
+    end
+
     def initialize(board, players)
       @board   = board
       @players = players
@@ -196,6 +207,11 @@ module Transamerica
       self.winner = players.detect do |player|
         objectives[player].all? { |city| board.connected?(city.pos, player.id)}
       end
+    end
+
+    def run
+      setup
+      step while !winner
     end
   end
 end
