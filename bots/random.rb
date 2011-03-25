@@ -4,7 +4,6 @@ class RandomBot
       place = pick_random(board)
     end while place.has_hq?
     @path = [place.pos]
-    puts "hq at #{@path.inspect}"
     @path.first
   end
 
@@ -15,7 +14,6 @@ class RandomBot
         move = pos + [dir]
         next unless new_place = board.at_adjusted(move)
         @path << new_place.pos
-        puts "going for #{move.inspect}"
         return [move]
       end
     end

@@ -103,6 +103,10 @@ module Transamerica
     def pos
       [x, y]
     end
+
+    def to_s
+      pos.inspect
+    end
   end
 
   class City
@@ -174,6 +178,7 @@ module Transamerica
         pos = player.position_hq(board, objectives[player])
         raise PlayerError.new(player, "node already has a HQ") if board.at(pos).has_hq?
         board.add_hq(pos, player.id)
+        log "put hq at #{pos.inspect}", player
       end
     end
 
@@ -198,8 +203,10 @@ module Transamerica
         raise PlayerError.new(player, "position #{pos.inspect} not connected to your hq") \
           unless board.connected?(to, player.id) || board.connected?(from, player.id)
 
+        log "played #{pos.inspect}", player
         board.add_rail(pos)
         check_winner
+        @current = (current + 1) % players.size
       end
     end
 
@@ -210,8 +217,22 @@ module Transamerica
     end
 
     def run
+      log "starting a game"
+      log "cities:"
+      board.cities.keys.each do |city|
+        log "\t\t#{city.name} (#{city.color}) #{city.pos}"
+      end
+      log "players:"
+      objectives.each do |player, objectives|
+        log "\t\t#{player} (#{objectives.map { |city| city.name }.join(', ')})"
+      end
       setup
       step while !winner
+    end
+
+    def log(msg, player=nil)
+      msg = "#{player.to_s[0,12].ljust(12)} : #{msg}"
+      puts(msg)
     end
   end
 end
