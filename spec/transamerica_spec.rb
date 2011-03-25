@@ -160,7 +160,7 @@ module Transamerica
       end
 
       it "moves left down" do
-        board.at_adjusted([1, 1, :ld]).pos.should == [0, 2]
+        board.at_adjusted([1, 1, :ld]).pos.should == [1, 2]
       end
 
       it "moves right" do
@@ -168,7 +168,7 @@ module Transamerica
       end
 
       it "moves right up" do
-        board.at_adjusted([1, 1, :ru]).pos.should == [2, 0]
+        board.at_adjusted([1, 1, :ru]).pos.should == [1, 0]
       end
 
       it "moves right down" do
