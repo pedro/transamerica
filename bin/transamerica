@@ -11,8 +11,11 @@ def load_player(fname, id)
   Engine.load_player File.read(fname), name
 end
 
-curr = 1
-players = ARGV.map { |bot| load_player(bot, "p#{curr += 1}") }
+curr = 0
+players = ARGV.map do |bot|
+  curr += 1
+  load_player(bot, "p#{curr}")
+end
 
 board = Board.new(5, 5)
 board.add_city [0,0], City.new("A", :red)
