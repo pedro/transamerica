@@ -20,8 +20,8 @@ end
 board = Board.new(5, 5)
 board.add_city [0,0], City.new("A", :red)
 board.add_city [1,1], City.new("B", :red)
-board.add_city [2,2], City.new("C", :red)
-board.add_city [3,3], City.new("D", :red)
+board.add_city [2,2], City.new("C", :blue)
+board.add_city [3,3], City.new("D", :blue)
 
 game = Engine.new(board, players)
 game.run
